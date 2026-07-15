@@ -12,6 +12,15 @@
   overflow: hidden;
   padding-top: var(--header-h);
 }
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise-overlay);
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
 
 .hero-grid {
   position: absolute; inset: 0;
@@ -90,20 +99,6 @@
   padding-top: var(--space-5);
 }
 .hero-meta div { display: flex; flex-direction: column; }
-
-.scroll-cue {
-  position: absolute; bottom: var(--space-6); left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
-  color: var(--color-text-on-dark-muted); font-size: var(--fs-micro);
-  letter-spacing: 0.1em; text-transform: uppercase; z-index: 2;
-}
-.scroll-cue .dot-track { width: 1px; height: 36px; background: var(--color-dark-border); position: relative; overflow: hidden; }
-.scroll-cue .dot-track::after {
-  content: ""; position: absolute; top: -20%; left: 0; width: 100%; height: 40%;
-  background: var(--gradient-brand);
-  animation: scrollDot 1.8s var(--ease-in-out) infinite;
-}
-@keyframes scrollDot { 0% { top: -40%; } 100% { top: 100%; } }
 
 /* ---- Marquee strip ---- */
 .marquee {
@@ -185,6 +180,20 @@
   border-radius: var(--radius-lg);
   background: var(--color-dark-2);
   border: 1px solid var(--color-dark-border);
+  transition: transform var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+}
+.testimonial:hover { transform: translateY(-4px); border-color: rgba(34,211,238,0.25); }
+.testimonial::before {
+  content: "\201C";
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-6);
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.14);
+  pointer-events: none;
 }
 .testimonial blockquote {
   font-family: var(--font-display);
@@ -193,6 +202,7 @@
   line-height: var(--lh-snug);
   margin: 0 0 var(--space-6);
   color: #fff;
+  position: relative;
 }
 .testimonial-author { display: flex; align-items: center; gap: var(--space-3); }
 .testimonial-avatar {
@@ -215,6 +225,14 @@
   background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(60% 100% at 50% 50%, black, transparent);
+}
+.cta-banner::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: var(--noise-overlay);
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  pointer-events: none;
 }
 .cta-banner .container { position: relative; z-index: 1; }
 .cta-banner h2 { color: #fff; }
