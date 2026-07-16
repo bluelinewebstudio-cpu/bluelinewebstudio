@@ -2,6 +2,20 @@
 (function () {
   "use strict";
 
+  // Phone number is assembled here (reversed, not stored as a plain digit
+  // string) and injected at runtime so it never appears as scrapable plain
+  // text in the page source — cuts down on spam calls from harvester bots.
+  (function injectPhone() {
+    var reversed = "94130521331"; // "13312503149" reversed
+    var digits = reversed.split("").reverse().join(""); // "13312503149"
+    var national = digits.slice(1);
+    var display = "(" + national.slice(0, 3) + ") " + national.slice(3, 6) + "-" + national.slice(6);
+    document.querySelectorAll(".js-phone").forEach(function (el) {
+      el.textContent = display;
+      if (el.tagName === "A") el.setAttribute("href", "tel:+" + digits);
+    });
+  })();
+
   var header = document.querySelector(".site-header");
   var navToggle = document.querySelector(".nav-toggle");
   var navLinks = document.querySelector(".nav-links");
