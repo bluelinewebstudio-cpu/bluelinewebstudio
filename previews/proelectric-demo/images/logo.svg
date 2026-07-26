@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Pro Electric logo">
+  <defs>
+    <linearGradient id="pe-navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14406B"/>
+      <stop offset="1" stop-color="#061A2E"/>
+    </linearGradient>
+    <linearGradient id="pe-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6B94C"/>
+      <stop offset="1" stop-color="#DB8A1E"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="url(#pe-navy)" stroke="#DB8A1E" stroke-width="1.5"/>
+  <path d="M35.5 12 19 35h10l-3.5 17L45 27H34l1.5-15Z" fill="url(#pe-gold)"/>
+</svg>
