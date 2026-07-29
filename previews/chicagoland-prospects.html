@@ -14,12 +14,21 @@
     --line: #E2E5EC;
     --accent: #2F6FFF;
     --accent-2: #8B5CF6;
-    --flag: #B45309;
-    --flag-bg: #FEF3E2;
-    --flag-line: #F3D9A8;
+    --note: #B45309;
+    --note-bg: #FEF3E2;
+    --note-line: #F3D9A8;
+    --ok: #15803D;
+    --ok-bg: #EAF6EE;
+    --ok-line: #BFE3CB;
     --idle: #6B7280;
     --idle-bg: #F0F1F4;
     --idle-line: #E2E5EC;
+    --hi: #DC2626;
+    --hi-bg: #FDECEC;
+    --md: #2F6FFF;
+    --md-bg: #EAF0FF;
+    --lo: #64748B;
+    --lo-bg: #EEF1F5;
     --mono: ui-monospace, "SF Mono", "Cascadia Code", "Consolas", monospace;
     --sans: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   }
@@ -31,12 +40,21 @@
     --line: rgba(255,255,255,0.10);
     --accent: #5B8CFF;
     --accent-2: #A78BFA;
-    --flag: #F5A947;
-    --flag-bg: rgba(245,169,71,0.12);
-    --flag-line: rgba(245,169,71,0.30);
+    --note: #F5A947;
+    --note-bg: rgba(245,169,71,0.12);
+    --note-line: rgba(245,169,71,0.30);
+    --ok: #4ADE80;
+    --ok-bg: rgba(74,222,128,0.12);
+    --ok-line: rgba(74,222,128,0.30);
     --idle: #8B93A7;
     --idle-bg: rgba(255,255,255,0.04);
     --idle-line: rgba(255,255,255,0.10);
+    --hi: #F87171;
+    --hi-bg: rgba(248,113,113,0.14);
+    --md: #5B8CFF;
+    --md-bg: rgba(91,140,255,0.14);
+    --lo: #94A3B8;
+    --lo-bg: rgba(148,163,184,0.14);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -47,12 +65,21 @@
       --line: rgba(255,255,255,0.10);
       --accent: #5B8CFF;
       --accent-2: #A78BFA;
-      --flag: #F5A947;
-      --flag-bg: rgba(245,169,71,0.12);
-      --flag-line: rgba(245,169,71,0.30);
+      --note: #F5A947;
+      --note-bg: rgba(245,169,71,0.12);
+      --note-line: rgba(245,169,71,0.30);
+      --ok: #4ADE80;
+      --ok-bg: rgba(74,222,128,0.12);
+      --ok-line: rgba(74,222,128,0.30);
       --idle: #8B93A7;
       --idle-bg: rgba(255,255,255,0.04);
       --idle-line: rgba(255,255,255,0.10);
+      --hi: #F87171;
+      --hi-bg: rgba(248,113,113,0.14);
+      --md: #5B8CFF;
+      --md-bg: rgba(91,140,255,0.14);
+      --lo: #94A3B8;
+      --lo-bg: rgba(148,163,184,0.14);
     }
   }
 
@@ -65,7 +92,7 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 96px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 48px 24px 96px; }
 
   header.doc-head {
     border-bottom: 2px solid var(--ink);
@@ -89,18 +116,18 @@
   }
   .doc-head p {
     margin: 0;
-    max-width: 62ch;
+    max-width: 66ch;
     color: var(--ink-soft);
     font-size: 15px;
   }
 
   .stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1px;
     background: var(--line);
     border: 1px solid var(--line);
-    margin: 28px 0 36px;
+    margin: 28px 0 28px;
   }
   .stat {
     background: var(--card);
@@ -108,7 +135,7 @@
   }
   .stat .num {
     font-family: var(--mono);
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     display: block;
     font-variant-numeric: tabular-nums;
@@ -122,33 +149,73 @@
 
   .controls {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--card);
     margin-bottom: 32px;
+    position: sticky;
+    top: 12px;
+    z-index: 5;
   }
-  .controls button {
+  .control-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .control-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin-right: 4px;
+  }
+  .chip-btn {
     font-family: var(--sans);
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
-    padding: 8px 14px;
+    padding: 6px 12px;
     border-radius: 999px;
     border: 1px solid var(--line);
-    background: var(--card);
+    background: var(--paper);
     color: var(--ink);
     cursor: pointer;
+    line-height: 1.2;
   }
-  .controls button.is-active {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
-  .controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .controls .hint { font-size: 12px; color: var(--ink-soft); }
+  .chip-btn.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  section.industry {
-    margin-bottom: 40px;
+  .show-hidden-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    user-select: none;
   }
+  .show-hidden-toggle input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+  .reset-link {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .reset-link:hover { color: var(--hi); }
+
+  section.industry { margin-bottom: 40px; }
+  section.industry.is-empty { display: none; }
   section.industry h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
@@ -158,9 +225,10 @@
     padding-bottom: 8px;
     border-bottom: 1px solid var(--line);
   }
+  section.industry h2 .count { font-family: var(--mono); font-weight: 500; text-transform: none; letter-spacing: 0; }
 
   .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; }
-  table { width: 100%; border-collapse: collapse; min-width: 640px; background: var(--card); }
+  table { width: 100%; border-collapse: collapse; min-width: 760px; background: var(--card); }
   thead th {
     text-align: left;
     font-size: 11px;
@@ -170,6 +238,7 @@
     font-weight: 600;
     padding: 10px 14px;
     border-bottom: 1px solid var(--line);
+    white-space: nowrap;
   }
   tbody td {
     padding: 12px 14px;
@@ -178,7 +247,8 @@
     font-size: 14px;
   }
   tbody tr:last-child td { border-bottom: none; }
-  tbody tr.is-hidden { display: none; }
+  tbody tr.is-hidden-row { display: none; }
+  tbody tr.is-marked-hidden { opacity: 0.5; }
 
   .biz { font-weight: 600; }
   .city { color: var(--ink-soft); font-family: var(--mono); font-size: 13px; white-space: nowrap; }
@@ -191,21 +261,59 @@
   }
   a.site:hover { text-decoration: underline; }
   a.site:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { display: block; margin-top: 5px; font-size: 12.5px; color: var(--note); max-width: 40ch; }
+  .note::before { content: "▸ "; }
 
-  .status {
+  .status-btn {
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
     gap: 6px;
+    font-family: var(--sans);
     font-size: 12px;
     font-weight: 600;
-    padding: 3px 9px 4px;
+    padding: 4px 10px;
     border-radius: 999px;
     white-space: nowrap;
-    border: 1px solid transparent;
+    border: 1px solid;
+    cursor: pointer;
   }
-  .status.flag { background: var(--flag-bg); color: var(--flag); border-color: var(--flag-line); }
-  .status.idle { background: var(--idle-bg); color: var(--idle); border-color: var(--idle-line); }
-  .note { display: block; margin-top: 5px; font-size: 12.5px; color: var(--ink-soft); max-width: 46ch; }
+  .status-btn.audited { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-line); }
+  .status-btn.not-audited { background: var(--idle-bg); color: var(--idle); border-color: var(--idle-line); }
+  .status-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .priority-group { display: inline-flex; gap: 4px; }
+  .priority-btn {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .priority-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .priority-btn.is-active[data-level="high"] { background: var(--hi-bg); color: var(--hi); border-color: var(--hi); }
+  .priority-btn.is-active[data-level="medium"] { background: var(--md-bg); color: var(--md); border-color: var(--md); }
+  .priority-btn.is-active[data-level="low"] { background: var(--lo-bg); color: var(--lo); border-color: var(--lo); }
+
+  .hide-btn {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .hide-btn.is-hidden-state { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .hide-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   footer.doc-foot {
     margin-top: 48px;
@@ -215,8 +323,21 @@
     color: var(--ink-soft);
   }
 
+  .no-results {
+    padding: 32px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    display: none;
+  }
+  .no-results.is-visible { display: block; }
+
   @media (max-width: 640px) {
-    .stats { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .controls { position: static; }
+    .reset-link { margin-left: 0; }
   }
 </style>
 </head>
@@ -226,45 +347,62 @@
   <header class="doc-head">
     <p class="eyebrow">BlueLine Web Studio — Internal</p>
     <h1>Chicagoland outreach list: sites due for a rebuild</h1>
-    <p>Ten trade &amp; local-service industries, three real businesses each, pulled from live search. Rows marked <strong>Flagged</strong> were opened and checked directly — the note says exactly what's wrong. Everything else is a real, verified-to-exist business worth a five-minute look before you reach out.</p>
+    <p>Ten trade &amp; local-service industries, three real businesses each, pulled from live search. Click a status badge to mark a lead audited, set a priority, or hide one you're done with — it's saved in this browser so it's here next time you open the link.</p>
   </header>
 
   <div class="stats">
-    <div class="stat"><span class="num">30</span><span class="label">Businesses logged</span></div>
-    <div class="stat"><span class="num">10</span><span class="label">Industries covered</span></div>
-    <div class="stat"><span class="num">10</span><span class="label">Confirmed issues found</span></div>
+    <div class="stat"><span class="num" id="stat-total">30</span><span class="label">Businesses</span></div>
+    <div class="stat"><span class="num">10</span><span class="label">Industries</span></div>
+    <div class="stat"><span class="num" id="stat-audited">0</span><span class="label">Audited</span></div>
+    <div class="stat"><span class="num" id="stat-hidden">0</span><span class="label">Hidden</span></div>
   </div>
 
   <div class="controls">
-    <button type="button" id="filter-all" class="is-active">All 30</button>
-    <button type="button" id="filter-flagged">Flagged only</button>
-    <span class="hint">Flagged = opened and audited directly, not just found in search.</span>
+    <div class="control-group" id="status-filter-group">
+      <span class="control-label">Status</span>
+      <button type="button" class="chip-btn is-active" data-status-filter="all">All</button>
+      <button type="button" class="chip-btn" data-status-filter="audited">Audited</button>
+      <button type="button" class="chip-btn" data-status-filter="not-audited">Not audited</button>
+    </div>
+    <div class="control-group" id="priority-filter-group">
+      <span class="control-label">Priority</span>
+      <button type="button" class="chip-btn is-active" data-priority-filter="all">All</button>
+      <button type="button" class="chip-btn" data-priority-filter="high">High</button>
+      <button type="button" class="chip-btn" data-priority-filter="medium">Medium</button>
+      <button type="button" class="chip-btn" data-priority-filter="low">Low</button>
+      <button type="button" class="chip-btn" data-priority-filter="none">Unset</button>
+    </div>
+    <label class="show-hidden-toggle">
+      <input type="checkbox" id="show-hidden" />
+      Show hidden (<span id="hidden-count">0</span>)
+    </label>
+    <button type="button" class="reset-link" id="reset-all">Reset all my changes</button>
   </div>
 
   <!-- AUTO REPAIR -->
-  <section class="industry">
-    <h2>Auto Repair</h2>
+  <section class="industry" data-industry="Auto Repair">
+    <h2>Auto Repair <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="lees-auto-clinic" data-audited="true" data-note="Mid-2010s build; a lengthy embedded financing token URL is exposed raw in the page.">
             <td class="biz">Lee's Auto Clinic</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://leesautoclinic.com/" target="_blank" rel="noopener">leesautoclinic.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Mid-2010s build; a lengthy embedded financing token URL is exposed raw in the page.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="i-can-fix-this" data-audited="true" data-note="Copyright footer still reads &ldquo;2012&ndash;2022.&rdquo; Duplicate footer content runs twice on the page.">
             <td class="biz">I Can Fix This!</td>
             <td class="city">Chicago (North Suburbs)</td>
             <td><a class="site" href="https://icanfixthisshops.com/" target="_blank" rel="noopener">icanfixthisshops.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Copyright footer still reads "2012–2022." Duplicate footer content runs twice on the page.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="logan-square-auto-repair" data-audited="false" data-note="">
             <td class="biz">Logan Square Auto Repair</td>
             <td class="city">Chicago (Logan Square)</td>
             <td><a class="site" href="https://www.logansquareautorepair.com/" target="_blank" rel="noopener">logansquareautorepair.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -272,29 +410,29 @@
   </section>
 
   <!-- LANDSCAPING -->
-  <section class="industry">
-    <h2>Landscaping</h2>
+  <section class="industry" data-industry="Landscaping">
+    <h2>Landscaping <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="ross-and-jacks-landscaping" data-audited="true" data-note="Live &ldquo;Why Choose Us&rdquo; section still has placeholder Lorem Ipsum filler text &mdash; never got replaced with real copy.">
             <td class="biz">Ross &amp; Jack's Landscaping</td>
             <td class="city">Elmhurst</td>
             <td><a class="site" href="https://rossandjacks.com/" target="_blank" rel="noopener">rossandjacks.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Live "Why Choose Us" section still has placeholder Lorem Ipsum filler text — never got replaced with real copy.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="selvins-landscaping" data-audited="false" data-note="">
             <td class="biz">Selvin's Landscaping Inc.</td>
             <td class="city">Elmhurst</td>
             <td><a class="site" href="https://www.selvinslandscaping.com/" target="_blank" rel="noopener">selvinslandscaping.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="woodlawns-landscape" data-audited="false" data-note="">
             <td class="biz">Woodlawns Landscape</td>
             <td class="city">Chicagoland</td>
             <td><a class="site" href="https://woodlawnslandscape.com/" target="_blank" rel="noopener">woodlawnslandscape.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -302,29 +440,29 @@
   </section>
 
   <!-- DRY CLEANING -->
-  <section class="industry">
-    <h2>Dry Cleaning</h2>
+  <section class="industry" data-industry="Dry Cleaning">
+    <h2>Dry Cleaning <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="monitor-cleaners" data-audited="true" data-note="Site fails to load over HTTPS at all &mdash; SSL handshake error in a modern browser. Most visitors just see a broken-connection warning.">
             <td class="biz">Monitor Cleaners</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="http://www.monitor-cleaners.com/" target="_blank" rel="noopener">monitor-cleaners.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Site fails to load over HTTPS at all — SSL handshake error in a modern browser. Most visitors just see a broken-connection warning.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="barry-regent-cleaners" data-audited="true" data-note="Early-2000s layout, broken image paths, no mobile-responsive design.">
             <td class="biz">Barry-Regent Dry Cleaners</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://www.barryregentcleaners.com/" target="_blank" rel="noopener">barryregentcleaners.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Early-2000s layout, broken image paths, no mobile-responsive design.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="sunmade-cleaners" data-audited="true" data-note="Early-2010s build; duplicate service headings and almost no visual hierarchy between sections.">
             <td class="biz">Sunmade Cleaners Inc.</td>
             <td class="city">Palatine</td>
             <td><a class="site" href="https://sunmadecleaners.com/" target="_blank" rel="noopener">sunmadecleaners.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Early-2010s build; duplicate service headings and almost no visual hierarchy between sections.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -332,29 +470,29 @@
   </section>
 
   <!-- HVAC -->
-  <section class="industry">
-    <h2>HVAC</h2>
+  <section class="industry" data-industry="HVAC">
+    <h2>HVAC <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="polar-heating" data-audited="false" data-note="">
             <td class="biz">Polar Heating &amp; Air Conditioning</td>
             <td class="city">Cicero / Berwyn</td>
             <td><a class="site" href="https://polarheatingandair.com/" target="_blank" rel="noopener">polarheatingandair.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="berwyn-western" data-audited="false" data-note="">
             <td class="biz">Berwyn Western</td>
             <td class="city">Berwyn</td>
             <td><a class="site" href="https://www.berwynwestern.com/" target="_blank" rel="noopener">berwynwestern.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="cardinal-heating-cooling" data-audited="false" data-note="">
             <td class="biz">Cardinal Heating &amp; Cooling</td>
             <td class="city">Western Suburbs</td>
             <td><a class="site" href="https://www.cardinalheatingandcooling.com/" target="_blank" rel="noopener">cardinalheatingandcooling.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -362,29 +500,29 @@
   </section>
 
   <!-- HAIR SALON / BARBER -->
-  <section class="industry">
-    <h2>Hair Salon &amp; Barber</h2>
+  <section class="industry" data-industry="Hair Salon &amp; Barber">
+    <h2>Hair Salon &amp; Barber <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="sally-josh-hair" data-audited="true" data-note="Design itself is fine, but all booking and pricing lives off-site on Booksy &mdash; nothing bookable on their own domain.">
             <td class="biz">Sally Josh Hair</td>
             <td class="city">Chicago (Lakeview)</td>
             <td><a class="site" href="https://sallyjoshhair.com/" target="_blank" rel="noopener">sallyjoshhair.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Design itself is fine, but all booking and pricing lives off-site on Booksy — nothing bookable on their own domain.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="barber-rocks" data-audited="false" data-note="">
             <td class="biz">Barber Rocks</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://www.barberrocks.com/" target="_blank" rel="noopener">barberrocks.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="logan-parlor" data-audited="false" data-note="">
             <td class="biz">Logan Parlor</td>
             <td class="city">Chicago (Logan Square)</td>
             <td><a class="site" href="https://loganparlor.com/" target="_blank" rel="noopener">loganparlor.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -392,29 +530,29 @@
   </section>
 
   <!-- LAW FIRMS -->
-  <section class="industry">
-    <h2>Small Law Firms</h2>
+  <section class="industry" data-industry="Small Law Firms">
+    <h2>Small Law Firms <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="ross-law-firm" data-audited="true" data-note="Early-2000s look, rigid non-responsive layout, duplicated nav menus on the same page.">
             <td class="biz">Ross Law Firm</td>
             <td class="city">Inverness</td>
             <td><a class="site" href="https://robertjross.com/small-business-lawyer-chicago/" target="_blank" rel="noopener">robertjross.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Early-2000s look, rigid non-responsive layout, duplicated nav menus on the same page.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="gg-law" data-audited="false" data-note="">
             <td class="biz">G &amp; G Law, LLC</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://www.gglawoffices.com/" target="_blank" rel="noopener">gglawoffices.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="shipley-law-group" data-audited="false" data-note="">
             <td class="biz">The Shipley Law Group</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://www.shipleylawgroup.com/" target="_blank" rel="noopener">shipleylawgroup.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -422,29 +560,29 @@
   </section>
 
   <!-- VETERINARY -->
-  <section class="industry">
-    <h2>Veterinary Clinics</h2>
+  <section class="industry" data-industry="Veterinary Clinics">
+    <h2>Veterinary Clinics <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="mayfair-animal-clinic" data-audited="true" data-note="Links inconsistently mix the real domain with a leftover staging URL (myftpupload.com) &mdash; looks like an unfinished migration.">
             <td class="biz">Mayfair Animal Clinic</td>
             <td class="city">Chicago (Mayfair)</td>
             <td><a class="site" href="https://mayfairveterinary.com/" target="_blank" rel="noopener">mayfairveterinary.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Links inconsistently mix the real domain with a leftover staging URL (myftpupload.com) — looks like an unfinished migration.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="animal-house-of-chicago" data-audited="false" data-note="">
             <td class="biz">Animal House of Chicago</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://animalhouseofchicago.com/" target="_blank" rel="noopener">animalhouseofchicago.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="partners-animal-hospital" data-audited="false" data-note="">
             <td class="biz">Partners Animal Hospital</td>
             <td class="city">Chicago (South Loop)</td>
             <td><a class="site" href="https://partnersvetsl.com/" target="_blank" rel="noopener">partnersvetsl.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -452,29 +590,29 @@
   </section>
 
   <!-- ROOFING -->
-  <section class="industry">
-    <h2>Roofing</h2>
+  <section class="industry" data-industry="Roofing">
+    <h2>Roofing <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="ow-roofing" data-audited="true" data-note="Whole content blocks are duplicated verbatim, and the footer has a stray backlink promoting an unrelated LA roofing company.">
             <td class="biz">O&amp;W Roofing</td>
             <td class="city">Cicero</td>
             <td><a class="site" href="https://www.owroofingcicero.com/" target="_blank" rel="noopener">owroofingcicero.com</a></td>
-            <td><span class="status flag">Flagged</span><span class="note">Whole content blocks are duplicated verbatim, and the footer has a stray backlink promoting an unrelated LA roofing company — template reuse gone unedited.</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="pro-roofing" data-audited="false" data-note="">
             <td class="biz">Pro-Roofing Inc.</td>
             <td class="city">Cicero / Naperville / Midway</td>
             <td><a class="site" href="https://www.pro-roofinginc.com/" target="_blank" rel="noopener">pro-roofinginc.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="el-diamante-roofing" data-audited="false" data-note="">
             <td class="biz">El Diamante Roofing &amp; Construction</td>
             <td class="city">Chicago / Cicero / Berwyn</td>
             <td><a class="site" href="https://www.eldiamanteroofing.com/" target="_blank" rel="noopener">eldiamanteroofing.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -482,29 +620,29 @@
   </section>
 
   <!-- REAL ESTATE -->
-  <section class="industry">
-    <h2>Independent Real Estate Agents</h2>
+  <section class="industry" data-industry="Independent Real Estate Agents">
+    <h2>Independent Real Estate Agents <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="chicagoland-brokers" data-audited="false" data-note="">
             <td class="biz">Chicagoland Brokers Inc.</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://www.chicagolandbrokers.net/" target="_blank" rel="noopener">chicagolandbrokers.net</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="beyond-properties-realty" data-audited="false" data-note="">
             <td class="biz">Beyond Properties Realty</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://www.beyondpropertiesrealty.com/" target="_blank" rel="noopener">beyondpropertiesrealty.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="chicago-property-sisters" data-audited="false" data-note="">
             <td class="biz">The Chicago Property Sisters</td>
             <td class="city">Chicago</td>
             <td><a class="site" href="https://chicagopropertysisters.com/" target="_blank" rel="noopener">chicagopropertysisters.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
@@ -512,63 +650,221 @@
   </section>
 
   <!-- PEST CONTROL -->
-  <section class="industry">
-    <h2>Pest Control</h2>
+  <section class="industry" data-industry="Pest Control">
+    <h2>Pest Control <span class="count"></span></h2>
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th><th>Priority</th><th>Hide</th></tr></thead>
         <tbody>
-          <tr>
+          <tr data-id="chicago-pests-llc" data-audited="false" data-note="">
             <td class="biz">Chicago Pests LLC</td>
-            <td class="city">Chicago / Illinois–Indiana</td>
+            <td class="city">Chicago / Illinois&ndash;Indiana</td>
             <td><a class="site" href="https://chicagopestsllc.com/" target="_blank" rel="noopener">chicagopestsllc.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="midwest-exterminating" data-audited="false" data-note="">
             <td class="biz">Midwest Exterminating</td>
             <td class="city">Cook / DuPage / McHenry / Will / Lake Co.</td>
             <td><a class="site" href="https://midwestext.com/" target="_blank" rel="noopener">midwestext.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
-          <tr>
+          <tr data-id="eco-tech-pest-control" data-audited="false" data-note="">
             <td class="biz">Eco Tech Pest Control</td>
             <td class="city">Chicagoland</td>
             <td><a class="site" href="https://ecotechpestcontrol.com/" target="_blank" rel="noopener">ecotechpestcontrol.com</a></td>
-            <td><span class="status idle">Not yet audited</span></td>
+            <td class="status-cell"></td><td class="priority-cell"></td><td class="hide-cell"></td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
+  <p class="no-results" id="no-results">Nothing matches the current filters.</p>
+
   <footer class="doc-foot">
-    Compiled from live web search, July 2026. "Flagged" rows were opened and checked directly — the note is a specific, real defect found on that visit, not a guess. "Not yet audited" businesses are real and confirmed to have an active site, just not personally reviewed yet — worth a five-minute look before an outreach email. Ownership, pricing, and site status can change; verify current contact details before reaching out.
+    Compiled from live web search, July 2026. The note under a business name is a specific, real defect I found when I personally opened that site &mdash; not every row has one. Status, priority, and hidden are yours to set and are saved only in this browser (not synced across devices). Ownership and site status can change; verify current contact details before reaching out.
   </footer>
 
 </div>
 
 <script>
-  (function () {
-    var allBtn = document.getElementById('filter-all');
-    var flaggedBtn = document.getElementById('filter-flagged');
-    var rows = Array.prototype.slice.call(document.querySelectorAll('tbody tr'));
+(function () {
+  "use strict";
+  var STORE_KEY = "blueline-prospects-state-v1";
 
-    function showAll() {
-      rows.forEach(function (r) { r.classList.remove('is-hidden'); });
-      allBtn.classList.add('is-active');
-      flaggedBtn.classList.remove('is-active');
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveState(state) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    catch (e) { /* storage unavailable, changes just won't persist */ }
+  }
+
+  var state = loadState();
+  var rows = Array.prototype.slice.call(document.querySelectorAll("tbody tr"));
+
+  // Capture each row's original authored default exactly once, before any
+  // render pass can overwrite data-audited with live state — otherwise
+  // "Reset all" can't tell the true default from a toggled value anymore.
+  var originalDefaults = {};
+  rows.forEach(function (tr) {
+    originalDefaults[tr.dataset.id] = { audited: tr.dataset.audited === "true" };
+  });
+
+  function getRowState(id) {
+    var s = state[id] || {};
+    var defaults = originalDefaults[id] || { audited: false };
+    return {
+      audited: typeof s.audited === "boolean" ? s.audited : defaults.audited,
+      priority: s.priority || "",
+      hidden: !!s.hidden
+    };
+  }
+  function setRowState(id, patch) {
+    state[id] = Object.assign({}, state[id] || {}, patch);
+    saveState(state);
+  }
+
+  function renderRow(tr) {
+    var id = tr.dataset.id;
+    var rs = getRowState(id);
+
+    // status cell
+    var statusCell = tr.querySelector(".status-cell");
+    statusCell.innerHTML = "";
+    var statusBtn = document.createElement("button");
+    statusBtn.type = "button";
+    statusBtn.className = "status-btn " + (rs.audited ? "audited" : "not-audited");
+    statusBtn.textContent = rs.audited ? "Audited" : "Not audited";
+    statusBtn.addEventListener("click", function () {
+      setRowState(id, { audited: !rs.audited });
+      renderRow(tr);
+      applyFilters();
+    });
+    statusCell.appendChild(statusBtn);
+    if (tr.dataset.note) {
+      var note = document.createElement("span");
+      note.className = "note";
+      note.innerHTML = tr.dataset.note;
+      statusCell.appendChild(note);
     }
-    function showFlaggedOnly() {
-      rows.forEach(function (r) {
-        var flagged = !!r.querySelector('.status.flag');
-        r.classList.toggle('is-hidden', !flagged);
+
+    // priority cell
+    var priorityCell = tr.querySelector(".priority-cell");
+    priorityCell.innerHTML = "";
+    var group = document.createElement("div");
+    group.className = "priority-group";
+    ["high", "medium", "low"].forEach(function (level) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "priority-btn" + (rs.priority === level ? " is-active" : "");
+      btn.dataset.level = level;
+      btn.textContent = level.charAt(0).toUpperCase();
+      btn.title = level.charAt(0).toUpperCase() + level.slice(1) + " priority";
+      btn.addEventListener("click", function () {
+        var next = rs.priority === level ? "" : level;
+        setRowState(id, { priority: next });
+        renderRow(tr);
+        applyFilters();
       });
-      flaggedBtn.classList.add('is-active');
-      allBtn.classList.remove('is-active');
-    }
-    allBtn.addEventListener('click', showAll);
-    flaggedBtn.addEventListener('click', showFlaggedOnly);
-  })();
+      group.appendChild(btn);
+    });
+    priorityCell.appendChild(group);
+
+    // hide cell
+    var hideCell = tr.querySelector(".hide-cell");
+    hideCell.innerHTML = "";
+    var hideBtn = document.createElement("button");
+    hideBtn.type = "button";
+    hideBtn.className = "hide-btn" + (rs.hidden ? " is-hidden-state" : "");
+    hideBtn.textContent = rs.hidden ? "Hidden" : "Hide";
+    hideBtn.addEventListener("click", function () {
+      setRowState(id, { hidden: !rs.hidden });
+      renderRow(tr);
+      applyFilters();
+    });
+    hideCell.appendChild(hideBtn);
+
+    tr.classList.toggle("is-marked-hidden", rs.hidden);
+    tr.dataset.priority = rs.priority;
+    tr.dataset.hidden = rs.hidden ? "true" : "false";
+    tr.dataset.audited = rs.audited ? "true" : "false";
+  }
+
+  rows.forEach(renderRow);
+
+  // ---- filters ----
+  var statusFilter = "all";
+  var priorityFilter = "all";
+  var showHidden = false;
+
+  function applyFilters() {
+    var visibleTotal = 0;
+    document.querySelectorAll("section.industry").forEach(function (section) {
+      var sectionRows = Array.prototype.slice.call(section.querySelectorAll("tbody tr"));
+      var visibleInSection = 0;
+      sectionRows.forEach(function (tr) {
+        var matchesStatus = statusFilter === "all" ||
+          (statusFilter === "audited" && tr.dataset.audited === "true") ||
+          (statusFilter === "not-audited" && tr.dataset.audited === "false");
+        var matchesPriority = priorityFilter === "all" ||
+          (priorityFilter === "none" && !tr.dataset.priority) ||
+          tr.dataset.priority === priorityFilter;
+        var matchesHidden = showHidden || tr.dataset.hidden !== "true";
+        var visible = matchesStatus && matchesPriority && matchesHidden;
+        tr.classList.toggle("is-hidden-row", !visible);
+        if (visible) { visibleInSection++; visibleTotal++; }
+      });
+      section.classList.toggle("is-empty", visibleInSection === 0);
+      var countEl = section.querySelector(".count");
+      if (countEl) countEl.textContent = "(" + visibleInSection + ")";
+    });
+    document.getElementById("no-results").classList.toggle("is-visible", visibleTotal === 0);
+    updateStats();
+  }
+
+  function updateStats() {
+    var total = rows.length;
+    var audited = rows.filter(function (r) { return r.dataset.audited === "true"; }).length;
+    var hidden = rows.filter(function (r) { return r.dataset.hidden === "true"; }).length;
+    document.getElementById("stat-total").textContent = total;
+    document.getElementById("stat-audited").textContent = audited;
+    document.getElementById("stat-hidden").textContent = hidden;
+    document.getElementById("hidden-count").textContent = hidden;
+  }
+
+  document.getElementById("status-filter-group").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-status-filter]");
+    if (!btn) return;
+    statusFilter = btn.dataset.statusFilter;
+    this.querySelectorAll(".chip-btn").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+    applyFilters();
+  });
+
+  document.getElementById("priority-filter-group").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-priority-filter]");
+    if (!btn) return;
+    priorityFilter = btn.dataset.priorityFilter;
+    this.querySelectorAll(".chip-btn").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+    applyFilters();
+  });
+
+  document.getElementById("show-hidden").addEventListener("change", function (e) {
+    showHidden = e.target.checked;
+    applyFilters();
+  });
+
+  document.getElementById("reset-all").addEventListener("click", function () {
+    if (!confirm("Reset every status, priority, and hidden mark you've set on this list? This can't be undone.")) return;
+    state = {};
+    saveState(state);
+    rows.forEach(renderRow);
+    applyFilters();
+  });
+
+  applyFilters();
+})();
 </script>
 </body>
 </html>
