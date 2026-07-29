@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Chicagoland Prospect List</title>
+<style>
+  :root {
+    --ink: #0B0E1A;
+    --ink-soft: #4B5468;
+    --paper: #F5F7FA;
+    --card: #FFFFFF;
+    --line: #E2E5EC;
+    --accent: #2F6FFF;
+    --accent-2: #8B5CF6;
+    --flag: #B45309;
+    --flag-bg: #FEF3E2;
+    --flag-line: #F3D9A8;
+    --idle: #6B7280;
+    --idle-bg: #F0F1F4;
+    --idle-line: #E2E5EC;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "Consolas", monospace;
+    --sans: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --ink: #F1F3F9;
+    --ink-soft: #A6AEC2;
+    --paper: #0A0E1A;
+    --card: #10162B;
+    --line: rgba(255,255,255,0.10);
+    --accent: #5B8CFF;
+    --accent-2: #A78BFA;
+    --flag: #F5A947;
+    --flag-bg: rgba(245,169,71,0.12);
+    --flag-line: rgba(245,169,71,0.30);
+    --idle: #8B93A7;
+    --idle-bg: rgba(255,255,255,0.04);
+    --idle-line: rgba(255,255,255,0.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #F1F3F9;
+      --ink-soft: #A6AEC2;
+      --paper: #0A0E1A;
+      --card: #10162B;
+      --line: rgba(255,255,255,0.10);
+      --accent: #5B8CFF;
+      --accent-2: #A78BFA;
+      --flag: #F5A947;
+      --flag-bg: rgba(245,169,71,0.12);
+      --flag-line: rgba(245,169,71,0.30);
+      --idle: #8B93A7;
+      --idle-bg: rgba(255,255,255,0.04);
+      --idle-line: rgba(255,255,255,0.10);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  header.doc-head {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 8px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .doc-head p {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin: 28px 0 36px;
+  }
+  .stat {
+    background: var(--card);
+    padding: 18px 20px;
+  }
+  .stat .num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    display: block;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .label {
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .controls button {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .controls button.is-active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .controls .hint { font-size: 12px; color: var(--ink-soft); }
+
+  section.industry {
+    margin-bottom: 40px;
+  }
+  section.industry h2 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; background: var(--card); }
+  thead th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    font-size: 14px;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.is-hidden { display: none; }
+
+  .biz { font-weight: 600; }
+  .city { color: var(--ink-soft); font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+  a.site {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  a.site:hover { text-decoration: underline; }
+  a.site:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .status {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 9px 4px;
+    border-radius: 999px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .status.flag { background: var(--flag-bg); color: var(--flag); border-color: var(--flag-line); }
+  .status.idle { background: var(--idle-bg); color: var(--idle); border-color: var(--idle-line); }
+  .note { display: block; margin-top: 5px; font-size: 12.5px; color: var(--ink-soft); max-width: 46ch; }
+
+  footer.doc-foot {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc-head">
+    <p class="eyebrow">BlueLine Web Studio — Internal</p>
+    <h1>Chicagoland outreach list: sites due for a rebuild</h1>
+    <p>Ten trade &amp; local-service industries, three real businesses each, pulled from live search. Rows marked <strong>Flagged</strong> were opened and checked directly — the note says exactly what's wrong. Everything else is a real, verified-to-exist business worth a five-minute look before you reach out.</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="num">30</span><span class="label">Businesses logged</span></div>
+    <div class="stat"><span class="num">10</span><span class="label">Industries covered</span></div>
+    <div class="stat"><span class="num">10</span><span class="label">Confirmed issues found</span></div>
+  </div>
+
+  <div class="controls">
+    <button type="button" id="filter-all" class="is-active">All 30</button>
+    <button type="button" id="filter-flagged">Flagged only</button>
+    <span class="hint">Flagged = opened and audited directly, not just found in search.</span>
+  </div>
+
+  <!-- AUTO REPAIR -->
+  <section class="industry">
+    <h2>Auto Repair</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Lee's Auto Clinic</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://leesautoclinic.com/" target="_blank" rel="noopener">leesautoclinic.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Mid-2010s build; a lengthy embedded financing token URL is exposed raw in the page.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">I Can Fix This!</td>
+            <td class="city">Chicago (North Suburbs)</td>
+            <td><a class="site" href="https://icanfixthisshops.com/" target="_blank" rel="noopener">icanfixthisshops.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Copyright footer still reads "2012–2022." Duplicate footer content runs twice on the page.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Logan Square Auto Repair</td>
+            <td class="city">Chicago (Logan Square)</td>
+            <td><a class="site" href="https://www.logansquareautorepair.com/" target="_blank" rel="noopener">logansquareautorepair.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- LANDSCAPING -->
+  <section class="industry">
+    <h2>Landscaping</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Ross &amp; Jack's Landscaping</td>
+            <td class="city">Elmhurst</td>
+            <td><a class="site" href="https://rossandjacks.com/" target="_blank" rel="noopener">rossandjacks.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Live "Why Choose Us" section still has placeholder Lorem Ipsum filler text — never got replaced with real copy.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Selvin's Landscaping Inc.</td>
+            <td class="city">Elmhurst</td>
+            <td><a class="site" href="https://www.selvinslandscaping.com/" target="_blank" rel="noopener">selvinslandscaping.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Woodlawns Landscape</td>
+            <td class="city">Chicagoland</td>
+            <td><a class="site" href="https://woodlawnslandscape.com/" target="_blank" rel="noopener">woodlawnslandscape.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DRY CLEANING -->
+  <section class="industry">
+    <h2>Dry Cleaning</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Monitor Cleaners</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="http://www.monitor-cleaners.com/" target="_blank" rel="noopener">monitor-cleaners.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Site fails to load over HTTPS at all — SSL handshake error in a modern browser. Most visitors just see a broken-connection warning.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Barry-Regent Dry Cleaners</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://www.barryregentcleaners.com/" target="_blank" rel="noopener">barryregentcleaners.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Early-2000s layout, broken image paths, no mobile-responsive design.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Sunmade Cleaners Inc.</td>
+            <td class="city">Palatine</td>
+            <td><a class="site" href="https://sunmadecleaners.com/" target="_blank" rel="noopener">sunmadecleaners.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Early-2010s build; duplicate service headings and almost no visual hierarchy between sections.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- HVAC -->
+  <section class="industry">
+    <h2>HVAC</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Polar Heating &amp; Air Conditioning</td>
+            <td class="city">Cicero / Berwyn</td>
+            <td><a class="site" href="https://polarheatingandair.com/" target="_blank" rel="noopener">polarheatingandair.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Berwyn Western</td>
+            <td class="city">Berwyn</td>
+            <td><a class="site" href="https://www.berwynwestern.com/" target="_blank" rel="noopener">berwynwestern.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Cardinal Heating &amp; Cooling</td>
+            <td class="city">Western Suburbs</td>
+            <td><a class="site" href="https://www.cardinalheatingandcooling.com/" target="_blank" rel="noopener">cardinalheatingandcooling.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- HAIR SALON / BARBER -->
+  <section class="industry">
+    <h2>Hair Salon &amp; Barber</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Sally Josh Hair</td>
+            <td class="city">Chicago (Lakeview)</td>
+            <td><a class="site" href="https://sallyjoshhair.com/" target="_blank" rel="noopener">sallyjoshhair.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Design itself is fine, but all booking and pricing lives off-site on Booksy — nothing bookable on their own domain.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Barber Rocks</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://www.barberrocks.com/" target="_blank" rel="noopener">barberrocks.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Logan Parlor</td>
+            <td class="city">Chicago (Logan Square)</td>
+            <td><a class="site" href="https://loganparlor.com/" target="_blank" rel="noopener">loganparlor.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- LAW FIRMS -->
+  <section class="industry">
+    <h2>Small Law Firms</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Ross Law Firm</td>
+            <td class="city">Inverness</td>
+            <td><a class="site" href="https://robertjross.com/small-business-lawyer-chicago/" target="_blank" rel="noopener">robertjross.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Early-2000s look, rigid non-responsive layout, duplicated nav menus on the same page.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">G &amp; G Law, LLC</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://www.gglawoffices.com/" target="_blank" rel="noopener">gglawoffices.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">The Shipley Law Group</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://www.shipleylawgroup.com/" target="_blank" rel="noopener">shipleylawgroup.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VETERINARY -->
+  <section class="industry">
+    <h2>Veterinary Clinics</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Mayfair Animal Clinic</td>
+            <td class="city">Chicago (Mayfair)</td>
+            <td><a class="site" href="https://mayfairveterinary.com/" target="_blank" rel="noopener">mayfairveterinary.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Links inconsistently mix the real domain with a leftover staging URL (myftpupload.com) — looks like an unfinished migration.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Animal House of Chicago</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://animalhouseofchicago.com/" target="_blank" rel="noopener">animalhouseofchicago.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Partners Animal Hospital</td>
+            <td class="city">Chicago (South Loop)</td>
+            <td><a class="site" href="https://partnersvetsl.com/" target="_blank" rel="noopener">partnersvetsl.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROOFING -->
+  <section class="industry">
+    <h2>Roofing</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">O&amp;W Roofing</td>
+            <td class="city">Cicero</td>
+            <td><a class="site" href="https://www.owroofingcicero.com/" target="_blank" rel="noopener">owroofingcicero.com</a></td>
+            <td><span class="status flag">Flagged</span><span class="note">Whole content blocks are duplicated verbatim, and the footer has a stray backlink promoting an unrelated LA roofing company — template reuse gone unedited.</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Pro-Roofing Inc.</td>
+            <td class="city">Cicero / Naperville / Midway</td>
+            <td><a class="site" href="https://www.pro-roofinginc.com/" target="_blank" rel="noopener">pro-roofinginc.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">El Diamante Roofing &amp; Construction</td>
+            <td class="city">Chicago / Cicero / Berwyn</td>
+            <td><a class="site" href="https://www.eldiamanteroofing.com/" target="_blank" rel="noopener">eldiamanteroofing.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- REAL ESTATE -->
+  <section class="industry">
+    <h2>Independent Real Estate Agents</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Chicagoland Brokers Inc.</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://www.chicagolandbrokers.net/" target="_blank" rel="noopener">chicagolandbrokers.net</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Beyond Properties Realty</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://www.beyondpropertiesrealty.com/" target="_blank" rel="noopener">beyondpropertiesrealty.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">The Chicago Property Sisters</td>
+            <td class="city">Chicago</td>
+            <td><a class="site" href="https://chicagopropertysisters.com/" target="_blank" rel="noopener">chicagopropertysisters.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PEST CONTROL -->
+  <section class="industry">
+    <h2>Pest Control</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business</th><th>Area</th><th>Site</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="biz">Chicago Pests LLC</td>
+            <td class="city">Chicago / Illinois–Indiana</td>
+            <td><a class="site" href="https://chicagopestsllc.com/" target="_blank" rel="noopener">chicagopestsllc.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Midwest Exterminating</td>
+            <td class="city">Cook / DuPage / McHenry / Will / Lake Co.</td>
+            <td><a class="site" href="https://midwestext.com/" target="_blank" rel="noopener">midwestext.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+          <tr>
+            <td class="biz">Eco Tech Pest Control</td>
+            <td class="city">Chicagoland</td>
+            <td><a class="site" href="https://ecotechpestcontrol.com/" target="_blank" rel="noopener">ecotechpestcontrol.com</a></td>
+            <td><span class="status idle">Not yet audited</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="doc-foot">
+    Compiled from live web search, July 2026. "Flagged" rows were opened and checked directly — the note is a specific, real defect found on that visit, not a guess. "Not yet audited" businesses are real and confirmed to have an active site, just not personally reviewed yet — worth a five-minute look before an outreach email. Ownership, pricing, and site status can change; verify current contact details before reaching out.
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var allBtn = document.getElementById('filter-all');
+    var flaggedBtn = document.getElementById('filter-flagged');
+    var rows = Array.prototype.slice.call(document.querySelectorAll('tbody tr'));
+
+    function showAll() {
+      rows.forEach(function (r) { r.classList.remove('is-hidden'); });
+      allBtn.classList.add('is-active');
+      flaggedBtn.classList.remove('is-active');
+    }
+    function showFlaggedOnly() {
+      rows.forEach(function (r) {
+        var flagged = !!r.querySelector('.status.flag');
+        r.classList.toggle('is-hidden', !flagged);
+      });
+      flaggedBtn.classList.add('is-active');
+      allBtn.classList.remove('is-active');
+    }
+    allBtn.addEventListener('click', showAll);
+    flaggedBtn.addEventListener('click', showFlaggedOnly);
+  })();
+</script>
+</body>
+</html>
